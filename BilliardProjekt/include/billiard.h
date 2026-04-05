@@ -13,8 +13,20 @@
     #define M_PI 3.14159265358979323846
 #endif
 
-// --- Struktúrák ---
-typedef struct { float x, y, z; } Vec3;
+//Struktúrák
+typedef struct {
+    float x, y, z;
+} Vec3;
+
+typedef struct {
+    float u, v;
+} Vec2;
+
+typedef struct {
+    Vec3* vertices;   //Csúcspontok tömbje
+    int vertex_count; //Hány darab vertex van
+    GLuint texID;     //Textúra azonosító (wood.jpg-nek)
+} Model;
 
 typedef struct {
     Vec3 pos;
@@ -24,19 +36,19 @@ typedef struct {
     GLuint texID;
 } Ball;
 
-// --- Globális változók (extern) ---
+//Globális változók
 extern Ball balls[BALL_COUNT];
 extern float camX, camY, camZ;
 extern float yaw, pitch;
 extern float lightBrightness;
-extern float deltaTime; // Az egyenletes mozgáshoz
+extern float deltaTime;
 
-// --- Függvények ---
+//Függvények
 void initGame();
 void updatePhysics();
 void drawScene(GLFWwindow* window);
 
-// GLFW Specifikus bemenetkezelés
+//GLFW Specifikus bemenetkezelés
 void processInput(GLFWwindow* window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset); // Opcionális: fényerőhöz
