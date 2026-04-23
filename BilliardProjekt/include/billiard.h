@@ -2,7 +2,9 @@
 #define BILLIARD_H
 
 #include <GLFW/glfw3.h>
-#include <math.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <stdbool.h>
 
 #define BALL_COUNT 5
 #define BALL_RADIUS 0.12f
@@ -13,45 +15,28 @@
     #define M_PI 3.14159265358979323846
 #endif
 
-//Struktúrák
-typedef struct {
-    float x, y, z;
-} Vec3;
+typedef struct { float x, y, z; } Vec3;
+typedef struct { Vec3 pos, vel, axis; float angle; } Ball;
 
 typedef struct {
-    float u, v;
-} Vec2;
+    float camX, camY, camZ;
+    float targetX, targetY, targetZ;
+    float yaw, pitch;
+    float deltaTime, lightBrightness;
+    float strikePower, cueOffset;
+    Vec3 strikePos;
+    bool ballInMotion;
+    bool isCharging;
+    Ball balls[BALL_COUNT];
+    GLuint wallTex, carpetTex, clothTex;
+} GameState;
 
-typedef struct {
-    Vec3* vertices;   //Csúcspontok tömbje
-    int vertex_count; //Hány darab vertex van
-    GLuint texID;     //Textúra azonosító (wood.jpg-nek)
-} Model;
-
-typedef struct {
-    Vec3 pos;
-    Vec3 vel;
-    Vec3 axis;
-    float angle;
-    GLuint texID;
-} Ball;
-
-//Globális változók
-extern Ball balls[BALL_COUNT];
-extern float camX, camY, camZ;
-extern float yaw, pitch;
-extern float lightBrightness;
-extern float deltaTime;
-
-//Függvények
-void initGame();
-void updatePhysics();
-void drawScene(GLFWwindow* window);
-
-//GLFW Specifikus bemenetkezelés
-void processInput(GLFWwindow* window);
+// Függvények
+void initGame(GameState* state);
+void updatePhysics(GameState* state);
+void processInput(GLFWwindow* window, GameState* state);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
-void scroll_callback(GLFWwindow* window, double xoffset, double yoffset); // Opcionális: fényerőhöz
+void drawScene(GameState* state);
 GLuint loadTexture(const char* filename);
 
 #endif
