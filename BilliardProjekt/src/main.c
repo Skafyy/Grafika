@@ -20,7 +20,7 @@ int main() {
     GameState state = {0}; initGame(&state);
     state.camY=2; state.camZ=5; state.yaw=-90; state.pitch=-20; state.lightBrightness=1;
 
-    GLFWwindow* w = glfwCreateWindow(1024, 768, "Billiard Pro - Full Refactor", NULL, NULL);
+    GLFWwindow* w = glfwCreateWindow(1024, 768, "Billiard Pro", NULL, NULL);
     glfwMakeContextCurrent(w); glfwSetWindowUserPointer(w, &state);
     glfwSetCursorPosCallback(w, mouse_callback); glfwSetInputMode(w, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
