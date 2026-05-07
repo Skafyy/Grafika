@@ -1,6 +1,6 @@
-🎱 Billiard Pro FPS
+#Billiard Pro FPS
 
-Leírás
+#Leírás
 
 A projekt egy 3D biliárd szimuláció, amely C nyelven készült OpenGL és GLFW használatával.
 A játék egy első személyű (FPS) nézetből irányítható, ahol a játékos szabadon mozoghat a szobában, célozhat, és meglökheti a fehér golyót.
@@ -11,7 +11,7 @@ A program tartalmaz alapvető fizikai szimulációt, beleértve:
 -súrlódást
 -lyukakba esést
 
-🚀 Funkciók
+#Funkciók
 -FPS kamera (egér + WASD mozgás)
 -Biliárd golyók fizikai szimulációja
 -Golyó–golyó ütközés
@@ -22,7 +22,7 @@ A program tartalmaz alapvető fizikai szimulációt, beleértve:
 -Állítható fényerő
 -Automatikus újraindítás, ha minden golyó eltűnt
 
-🎮 Irányítás
+#Irányítás
 -Billentyű	Funkció
 -W A S D	Mozgás
 -Egér	Nézés / célzás
@@ -31,44 +31,45 @@ A program tartalmaz alapvető fizikai szimulációt, beleértve:
 -F1	Súgó megjelenítése
 -ESC	Kilépés
 
-🧱 Technológiák
+#Technológiák
 -C
 -OpenGL
 -GLU
 -GLFW
 -stb_image (textúra betöltés)
 
-📂 Projekt struktúra
+#Projekt struktúra
 .
 ├── src/
-│   ├── main.c        # Renderelés és fő ciklus
-│   ├── physics.c     # Fizikai számítások és input kezelés
+│   ├── main.c
+│   ├── physics.c
+|   ├── renderer.c
+|   ├── input.c
 ├── include/
-│   └── billiard.h    # Adatszerkezetek és konstansok
-├── assets/
-│   ├── wall.jpg
-│   ├── carpet.jpg
-│   ├── cloth.jpg
+│   └── billiard.h
+|   ├── wall.jpg
+|   ├── carpet.jpg
+|   ├── cloth.jpg
 ├── Makefile
 └── README.md
 
-⚙️ Fordítás
+#Fordítás
 
-🪟 Windows (MSYS2 - ajánlott)
+Windows (MSYS2 - ajánlott)
 Nyisd meg a MSYS2 MinGW64 terminált, majd:
 pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-glfw
 mingw32-make
 
-🐧 Linux
+#Linux
 make
 
 Szükséges csomagok (pl. Ubuntu):
 
 sudo apt install build-essential libglfw3-dev libglu1-mesa-dev
-▶️ Futtatás
+#Futtatás
 ./BilliardProjekt
 
-⚠️ Megjegyzések
+#Megjegyzések
 A program OpenGL fixed pipeline-t használ (glBegin, stb.)
 A fizika egyszerűsített, nem teljesen realisztikus
 
