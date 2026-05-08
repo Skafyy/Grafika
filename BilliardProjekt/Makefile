@@ -1,29 +1,41 @@
 CC = gcc
-
-INCDIR = /mingw64/include
-LIBDIR = /mingw64/lib
-SRCDIR = src
-BINDIR = bin
-
 CFLAGS = -I$(INCDIR) -Wall -O2
+LIBS = -Llib -lglfw3 -lglu32 -lopengl32 -lgdi32 -lwinmm
 
-LIBS = -L$(LIBDIR) -lglfw3 -lglu32 -lopengl32 -lgdi32 -lwinmm
+SRCDIR = src
+INCDIR = include
+# Új mappák a rendszerezéshez
+OBJDIR = obj
+BINDIR = bin
+ASSETDIR = assets
 
-SOURCES = $(SRCDIR)/main.c \
-          $(SRCDIR)/physics.c \
-          $(SRCDIR)/input.c \
-          $(SRCDIR)/renderer.c
-
+# Fájlok listázása
+SOURCES = $(wildcard $(SRCDIR)/*.c)
+# Az objektum fájlok most már az /obj mappába kerülnek
+OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 TARGET = $(BINDIR)/billiard.exe
 
-all: $(TARGET)
+all: $(TARGET) copy_assets
 
-$(TARGET): $(SOURCES)
-	@if [ ! -d "$(BINDIR)" ]; then mkdir $(BINDIR); fi
-	$(CC) $(SOURCES) $(CFLAGS) $(LIBS) -o $(TARGET)
+# 1. Linkelés
+$(TARGET): $(OBJECTS)
+	@mkdir -p $(BINDIR)
+	$(CC) $(OBJECTS) -o $(TARGET) $(LIBS)
+
+# 2. Fordítás (.c -> .o) az /obj mappába
+$(OBJDIR)/%.o: $(SRCDIR)/%.c
+	@mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# 3. Assetek másolása (hogy a bin/assets mindig friss legyen)
+copy_assets:
+	@mkdir -p $(BINDIR)/assets
+	@cp -r $(ASSETDIR)/* $(BINDIR)/assets/ 2>/dev/null || xcopy /E /I /Y $(ASSETDIR) bin\assets
 
 clean:
-	@if [ -d "$(BINDIR)" ]; then rm -rf $(BINDIR); fi
+	rm -rf $(OBJDIR) $(BINDIR)
 
 run: all
-	./$(TARGET)
+	cd $(BINDIR) && ./billiard.exe
+
+.PHONY: all clean run copy_assets

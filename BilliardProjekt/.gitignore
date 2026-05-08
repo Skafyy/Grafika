@@ -1,0 +1,4 @@
+bin/*.exe
+bin/*.dll
+*.o
+.vscode/
