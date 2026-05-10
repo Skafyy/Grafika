@@ -1,77 +1,49 @@
-#Billiard Pro FPS
+# Biliárd Szimuláció - Grafika Programozás Projekt
 
-#Leírás
+Egy interaktív, 3D biliárd szimuláció, amely C nyelven és OpenGL technológiával készült. A projekt célja a grafikai alapelvek (világítás, textúrázás, 3D modellezés) és az alapvető fizikai interakciók bemutatása.
 
-A projekt egy 3D biliárd szimuláció, amely C nyelven készült OpenGL és GLFW használatával.
-A játék egy első személyű (FPS) nézetből irányítható, ahol a játékos szabadon mozoghat a szobában, célozhat, és meglökheti a fehér golyót.
+##Assets letöltése
 
-A program tartalmaz alapvető fizikai szimulációt, beleértve:
--golyók mozgását
--ütközéseket
--súrlódást
--lyukakba esést
+A projekt futtatásához szükséges 3D modellek és textúrák méretük miatt külső tárhelyen találhatóak. A program **nem fog megfelelően elindulni** ezek nélkül.
 
-#Funkciók
--FPS kamera (egér + WASD mozgás)
--Biliárd golyók fizikai szimulációja
--Golyó–golyó ütközés
--Falról visszapattanás
--Lyukakba esés kezelése
--Lövés erősségének szabályozása (Space)
--HUD erőmérő (töltés közben)
--Állítható fényerő
--Automatikus újraindítás, ha minden golyó eltűnt
+**[Assets Letöltése (Bitly link)](https://bit.ly/4wltyvf)**
 
-#Irányítás
--Billentyű	Funkció
--W A S D	Mozgás
--Egér	Nézés / célzás
--SPACE	Lövés (nyomva tartva erő gyűjtése)
-+ / -	Fényerő állítása
--F1	Súgó megjelenítése
--ESC	Kilépés
+### Telepítés:
+1. Töltsd le az `assets.zip` fájlt a fenti linkről.
+2. Csomagold ki a projekt gyökérkönyvtárába.
+3. Ellenőrizd, hogy létezik-e az `assets/models` és `assets/textures` elérési út.
 
-#Technológiák
--C
--OpenGL
--GLU
--GLFW
--stb_image (textúra betöltés)
+Technikai jellemzők
 
-#Projekt struktúra
-.
-├── src/
-│   ├── main.c
-│   ├── physics.c
-|   ├── renderer.c
-|   ├── input.c
-├── include/
-│   └── billiard.h
-|   ├── wall.jpg
-|   ├── carpet.jpg
-|   ├── cloth.jpg
-├── Makefile
-└── README.md
+### Megjelenítés és Grafika
+* **Dákótartó (Cue Rack):** Egyedi 3D modell a falon, amely procedurális textúra-leképezést (auto-mapping) használ a valósághű fa erezet megjelenítéséhez.
+* **Dinamikus dákók:** 5 darab különböző színű dákó a tartóban, egyedi anyagjellemzőkkel.
+* **Világítás:** Phong-modell alapú világítás. A dákótartó és az asztal lábai lakkozott hatást keltő *specular* (tükröződő) csillogással rendelkeznek.
+* **Textúrázás:** Többszörös textúra-kezelés (posztó, fa, padló, falak).
 
-#Fordítás
+### Játékmenet
+* **Fizika:** Golyó-fal és golyó-golyó ütközések kezelése.
+* **Erőmérő (HUD):** Interaktív erőmérő csík a pontos lökések kivitelezéséhez.
+* **Kamera:** Szabad nézelődés (Yaw/Pitch) és mozgás a biliárdteremben.
 
-Windows (MSYS2 - ajánlott)
-Nyisd meg a MSYS2 MinGW64 terminált, majd:
-pacman -S mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-glfw
-mingw32-make
+---
 
-#Linux
-make
+## Irányítás
 
-Szükséges csomagok (pl. Ubuntu):
+| Gomb | Funkció |
+| :--- | :--- |
+| **W, A, S, D** | Mozgás a teremben |
+| **Egér** | Kamera forgatása (Nézelődés) |
+| **Space (Hold)** | Ütés erejének feltöltése |
+| **Space (Release)** | Lövés a fehér golyóval |
 
-sudo apt install build-essential libglfw3-dev libglu1-mesa-dev
-#Futtatás
-./BilliardProjekt
+---
 
-#Megjegyzések
-A program OpenGL fixed pipeline-t használ (glBegin, stb.)
-A fizika egyszerűsített, nem teljesen realisztikus
+## Fordítás és Futtatás
 
-👤 Szerző
-Varga István Hunor - Skafyy
+A projekt lefordításához GCC fordító és a szükséges OpenGL könyvtárak (GLFW3, GLU) megléte szükséges.
+
+1. Nyiss egy terminált a projekt mappájában.
+2. Futtasd a `make` parancsot:
+   ```bash
+   make
