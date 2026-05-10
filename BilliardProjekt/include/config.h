@@ -9,6 +9,7 @@
 #define FRICTION_FACTOR 0.991f
 #define BOUNCE_WALL 0.85f
 #define BOUNCE_BALL 0.95f
+#define TABLE_LEG_HEIGHT 2.0f
 
 #define WINDOW_WIDTH 1024
 #define WINDOW_HEIGHT 768

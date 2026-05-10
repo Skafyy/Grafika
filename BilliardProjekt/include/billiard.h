@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include "config.h"
 #include <stdbool.h>
+#include "model.h"
 
 typedef struct { float x, y, z; } Vec3;
 
@@ -33,7 +34,9 @@ typedef struct {
     float light_intensity;
     bool is_charging;
     bool show_menu;
-    unsigned int textures[3]; // 0: cloth, 1: carpet, 2: wall
+    Model* rackModel;
+    Model* cueModel;
+    unsigned int textures[4]; // 0: cloth, 1: carpet, 2: wall
 } GameState;
 
 void input_handle(GLFWwindow* window, GameState* state);

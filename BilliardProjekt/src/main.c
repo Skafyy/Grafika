@@ -67,9 +67,27 @@ int main() {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
 
-    state.textures[0] = loadTexture("assets/cloth.jpg"); 
-    state.textures[1] = loadTexture("assets/carpet.jpg"); 
-    state.textures[2] = loadTexture("assets/wall.jpg"); 
+    state.textures[0] = loadTexture("assets/textures/cloth.jpg"); 
+    state.textures[1] = loadTexture("assets/textures/carpet.jpg"); 
+    state.textures[2] = loadTexture("assets/textures/wall.jpg"); 
+    state.textures[3] = loadTexture("assets/textures/rack.jpg");
+
+// A modellek a bin/assets/models mappában vannak
+state.cueModel = load_obj("assets/models/cue.obj");
+state.rackModel = load_obj("assets/models/rack_complete.obj");
+
+// Ellenőrzés (hogy lásd a konzolon, ha sikerült)
+if (state.cueModel) {
+    printf("Sikeres: cue.obj betoltve!\n");
+} else {
+    printf("HIBA: cue.obj nem talalhato itt: assets/models/cue.obj\n");
+}
+
+if (state.rackModel) {
+    printf("Sikeres: rack.obj betoltve!\n");
+} else {
+    printf("HIBA: rack.obj nem talalhato itt: assets/models/rack.obj\n");
+}
 
 
     float lastTime = 0.0f;

@@ -7,7 +7,6 @@
 #define M_PI 3.14159265358979323846f
 #endif
 
-
 void draw_sphere(float radius, int slices, int stacks) {
     GLUquadric* quad = gluNewQuadric();
     if (quad) {
@@ -27,6 +26,61 @@ void draw_cue(float length, float width_base, float width_tip) {
     }
 }
 
+
+void draw_pro_cue_rack(GameState* state) {
+    if (!state->rackModel) return;
+
+    glPushMatrix();
+    glTranslatef(-19.0f, -1.0f, -5.0f); 
+    glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+    
+    glScalef(2.5f, 2.5f, 2.5f); 
+
+   glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, state->textures[3]); // rack.jpg
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    glColor3f(1.0f, 1.0f, 1.0f); 
+
+    glEnable(GL_TEXTURE_GEN_S);
+    glEnable(GL_TEXTURE_GEN_T);
+    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+
+    glEnable(GL_LIGHTING);
+    draw_model(state->rackModel);
+
+    glDisable(GL_TEXTURE_GEN_S);
+    glDisable(GL_TEXTURE_GEN_T);
+    glDisable(GL_TEXTURE_2D);
+
+    float rack_cue_colors[5][3] = {
+        {1.0f, 1.0f, 1.0f}, // Fehér
+        {0.1f, 0.1f, 0.1f}, // Fekete
+        {0.2f, 0.2f, 0.8f}, // Kék
+        {0.8f, 0.2f, 0.2f}, // Piros
+        {0.9f, 0.8f, 0.5f}  // Világos fa/krém
+    };
+
+    for(int i = 0; i < 5; i++) {
+        glPushMatrix();
+        float cue_x = -0.25f + (i * 0.125f);
+        glTranslatef(cue_x, 0.11f, 0.11f);
+        
+        glColor3fv(rack_cue_colors[i]);
+        
+        glBegin(GL_QUADS);
+            glNormal3f(0, 0, 1);
+            glVertex3f(0.0f, 0.0f, 0.0f);
+            glVertex3f(0.04f, 0.0f, 0.0f);
+            glVertex3f(0.04f, 1.6f, 0.0f);
+            glVertex3f(0.0f, 1.6f, 0.0f);
+        glEnd();
+        glPopMatrix();
+    }
+    glPopMatrix();
+}
+
+
 void setup_lights() {
 glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -41,7 +95,6 @@ glEnable(GL_LIGHTING);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
 
-    // Fény gyengülése a távolsággal (hogy ne legyen az egész szoba egyformán világos)
     glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.8f);
     glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.02f);
     glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.005f);
@@ -128,15 +181,13 @@ void renderer_draw(GameState* state) {
     // --- PLAFON ---
     glDisable(GL_TEXTURE_2D);
     glColor3f(0.75f, 0.75f, 0.75f);
-    
     glBegin(GL_QUADS);
         glNormal3f(0, -1, 0);
         glVertex3f(-roomSize, wallHeight, -roomSize);
         glVertex3f( roomSize, wallHeight, -roomSize);
         glVertex3f( roomSize, wallHeight,  roomSize);
         glVertex3f(-roomSize, wallHeight,  roomSize);
-    glEnd();
-    
+    glEnd();  
     glEnable(GL_TEXTURE_2D);
 
     // --- LÁMPATEST AZ ASZTAL FELETT ---
@@ -158,9 +209,16 @@ void renderer_draw(GameState* state) {
     glPopMatrix();
     glEnable(GL_TEXTURE_2D);
 
+    
+
+        draw_pro_cue_rack(state);
+
+        glEnable(GL_TEXTURE_2D);
+
     // --- ASZTAL LÁBAI ---
     glEnable(GL_LIGHTING);
     glBindTexture(GL_TEXTURE_2D, state->textures[2]); // Fa textúra
+    glColor3f(1.0f, 1.0f, 1.0f); // Fehérre színezzük, hogy a textúra érvényesüljön
     float lw = 0.2f; 
     for (int i = 0; i < 4; i++) {
         float lx = (i < 2 ? 1 : -1) * (tw - lw);
@@ -178,7 +236,6 @@ void renderer_draw(GameState* state) {
 
     // --- ASZTAL POSZTÓ (Játékfelület) ---
     glBindTexture(GL_TEXTURE_2D, state->textures[0]);
-    glColor3f(1.0f, 1.0f, 1.0f);
     glBegin(GL_QUADS);
         glNormal3f(0, 1, 0);
         glTexCoord2f(0, 0); glVertex3f(-tw, 0.01f, -td);

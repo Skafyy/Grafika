@@ -115,25 +115,5 @@ void input_handle(GLFWwindow* window, GameState* state) {
         state->is_charging = false;
     }
 
-    if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS) {
-        
-        printf("\n--- BILLIARD STATUS ---\n");
-        printf("Kamera pozicio: X:%.2f, Y:%.2f, Z:%.2f\n", 
-                state->camera.position.x, 
-                state->camera.position.y, 
-                state->camera.position.z);
-        
-        printf("Kamera szogek: Yaw:%.2f, Pitch:%.2f\n", 
-                state->camera.yaw, 
-                state->camera.pitch);
-
-        if (state->is_charging) {
-            printf("UTES EREJE: [%.0f%%]\n", state->strike_power * 100.0f);
-        } else {
-            printf("Allapot: Kesz az utesre.\n");
-        }
-        printf("-----------------------\n");
-    }
-
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) glfwSetWindowShouldClose(window, true);
 }
