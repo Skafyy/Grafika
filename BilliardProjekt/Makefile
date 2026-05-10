@@ -1,41 +1,55 @@
+# Operációs rendszer detektálása
+ifeq ($(OS),Windows_NT)
+    # Windows (CMD/PowerShell) beállítások
+    # A 'subst' azért kell, mert a Windows mkdir nem szereti a perjelet (/)
+    MKDIR = if not exist $(subst /,\,$1) mkdir $(subst /,\,$1)
+    RM = if exist $(subst /,\,$1) rmdir /s /q $(subst /,\,$1)
+    COPY_DIR = xcopy /E /I /Y
+    EXE = .exe
+else
+    # Linux / macOS / Git Bash beállítások
+    MKDIR = mkdir -p $1
+    RM = rm -rf $1
+    COPY_DIR = cp -r
+    EXE =
+endif
+
 CC = gcc
 CFLAGS = -I$(INCDIR) -Wall -O2
 LIBS = -Llib -lglfw3 -lglu32 -lopengl32 -lgdi32 -lwinmm
 
 SRCDIR = src
 INCDIR = include
-# Új mappák a rendszerezéshez
 OBJDIR = obj
 BINDIR = bin
 ASSETDIR = assets
 
-# Fájlok listázása
 SOURCES = $(wildcard $(SRCDIR)/*.c)
-# Az objektum fájlok most már az /obj mappába kerülnek
 OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-TARGET = $(BINDIR)/billiard.exe
+TARGET = $(BINDIR)/billiard$(EXE)
 
 all: $(TARGET) copy_assets
 
 # 1. Linkelés
 $(TARGET): $(OBJECTS)
-	@mkdir -p $(BINDIR)
+	@$(call MKDIR, $(BINDIR))
 	$(CC) $(OBJECTS) -o $(TARGET) $(LIBS)
 
-# 2. Fordítás (.c -> .o) az /obj mappába
+# 2. Fordítás (.c -> .o)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(OBJDIR)
+	@$(call MKDIR, $(OBJDIR))
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# 3. Assetek másolása (hogy a bin/assets mindig friss legyen)
+# 3. Assetek másolása
 copy_assets:
-	@mkdir -p $(BINDIR)/assets
-	@cp -r $(ASSETDIR)/* $(BINDIR)/assets/ 2>/dev/null || xcopy /E /I /Y $(ASSETDIR) bin\assets
+	@$(call MKDIR, $(BINDIR)/assets)
+	@$(COPY_DIR) $(ASSETDIR) $(subst /,\,$(BINDIR)/assets)
 
 clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+	@$(call RM, $(OBJDIR))
+	@$(call RM, $(BINDIR))
 
 run: all
-	cd $(BINDIR) && ./billiard.exe
+	cd $(BINDIR) && .$(subst /,\,/billiard$(EXE))
 
 .PHONY: all clean run copy_assets
